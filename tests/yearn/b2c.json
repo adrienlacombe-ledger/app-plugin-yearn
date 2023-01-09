@@ -1,6 +1,14 @@
 {
     "chainId": 1,
     "contracts": [{
+        "address": "0x90c1f9220d90d3966fbee24045edd73e1d588ad5",
+        "contractName": "veYFI",
+        "selectors": {
+            "0x3ccfd60b": {"erc20OfInterest": [], "method": "withdraw", "plugin": "Yearn"},
+            "0x622b6d96": {"erc20OfInterest": [], "method": "modify_lock", "plugin": "Yearn"},
+            "0x14557b8c": {"erc20OfInterest": [], "method": "modify_lock_to", "plugin": "Yearn"}
+        }
+    }, {
         "address": "0xc2c171bd6fc3b5885b589ed8b4d135f31085e973",
         "contractName": "Zap In",
         "selectors": {
