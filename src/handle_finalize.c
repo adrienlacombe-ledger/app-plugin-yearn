@@ -14,7 +14,11 @@ void handle_finalize(void *parameters) {
         case CLAIM:
             msg->numScreens -= 1;
             break;
+        case MODIFY_LOCK:
+            msg->numScreens += 1;
+            break;
         case WITHDRAW_TO_SLIPPAGE:
+        case MODIFY_LOCK_TO:
             msg->numScreens += 2;
             break;
         case ZAP_IN:

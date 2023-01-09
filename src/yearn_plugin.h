@@ -5,7 +5,7 @@
 #include <string.h>
 
 #define PLUGIN_NAME          "Yearn"
-#define NUM_SELECTORS        8
+#define NUM_SELECTORS        10
 #define MAX_VAULT_TICKER_LEN 18  // 17 characters + '\0'
 
 // Yearn partners contract address
@@ -26,6 +26,8 @@ typedef enum {
     WITHDRAW_TO_SLIPPAGE,
     ZAP_IN,
     CLAIM,
+    MODIFY_LOCK,
+    MODIFY_LOCK_TO,
 } selector_t;
 
 // Enumeration used to parse the smart contract data.
@@ -39,6 +41,7 @@ typedef enum {
 #define AMOUNT               7
 #define RECIPIENT            8
 #define SLIPPAGE             9
+#define UNLOCK_TIME          10
 #define UNEXPECTED_PARAMETER 13  // when it's done parsing but there's still data there
 
 extern const uint8_t *const YEARN_SELECTORS[NUM_SELECTORS];
@@ -57,6 +60,7 @@ extern yearnVaultDefinition_t const YEARN_VAULTS[NUM_YEARN_VAULTS];
 typedef struct context_t {
     uint8_t amount[INT256_LENGTH];
     uint8_t slippage[INT256_LENGTH];
+    uint8_t unlock_time[INT256_LENGTH];
     uint8_t vault_address[ADDRESS_LENGTH];
     uint8_t extra_address[ADDRESS_LENGTH];
     char vault[MAX_VAULT_TICKER_LEN];

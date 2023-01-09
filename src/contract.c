@@ -25,7 +25,6 @@ static const uint8_t WITHDRAW_TO_SLIPPAGE_SELECTOR[SELECTOR_SIZE] = {
     0x36,
     0x97,
     0xc8};  // withdraw(uint256 maxShares, address recipient, uint256 maxLoss)
-static const uint8_t CLAIM_SELECTOR[SELECTOR_SIZE] = {0x4e, 0x71, 0xd9, 0x2d};  // claim()
 static const uint8_t ZAP_IN_SELECTOR[SELECTOR_SIZE] = {
     0xb6,
     0xc2,
@@ -33,6 +32,17 @@ static const uint8_t ZAP_IN_SELECTOR[SELECTOR_SIZE] = {
     0xe9};  // portalIn(address sellToken, uint256 sellAmount, address intermediateToken, address
             // buyToken, uint256 minBuyAmount, address target, bytes calldata data, address partner,
             // address yearnAffiliate)
+static const uint8_t CLAIM_SELECTOR[SELECTOR_SIZE] = {0x4e, 0x71, 0xd9, 0x2d};  // claim()
+static const uint8_t MODIFY_LOCK_SELECTOR[SELECTOR_SIZE] = {
+    0x62,
+    0x2b,
+    0x6d,
+    0x96};  // modify_lock(uint256 amouny, uint256 unlock_time)
+static const uint8_t MODIFY_LOCK_TO_SELECTOR[SELECTOR_SIZE] = {
+    0x14,
+    0x55,
+    0x7b,
+    0x8c};  // modify_lock(uint256 amouny, uint256 unlock_time, address user)
 
 // Array of all the different boilerplate selectors. Make sure this follows the same order as the
 // enum defined in `yearn_plugin.h`
@@ -43,12 +53,18 @@ const uint8_t *const YEARN_SELECTORS[NUM_SELECTORS] = {DEPOSIT_SELECTOR,
                                                        WITHDRAW_TO_SELECTOR,
                                                        WITHDRAW_TO_SLIPPAGE_SELECTOR,
                                                        ZAP_IN_SELECTOR,
-                                                       CLAIM_SELECTOR};
+                                                       CLAIM_SELECTOR,
+                                                       MODIFY_LOCK,
+                                                       MODIFY_LOCK_TO};
 
 // Yearn partners contract address
 const uint8_t YEARN_PARTNERS_ADDRESS[ADDRESS_LENGTH] = {0x8e, 0xe3, 0x92, 0xa4, 0x78, 0x73, 0x97,
                                                         0x12, 0x6c, 0x16, 0x3c, 0xb9, 0x84, 0x4d,
                                                         0x7c, 0x44, 0x7d, 0xa4, 0x19, 0xd8};
+// Yearn veYFI contract
+const uint8_t YEARN_VEYFI_ADDRESS[ADDRESS_LENGTH] = {0x90, 0xc1, 0xf9, 0x22, 0x0d, 0x90, 0xd3,
+                                                     0x96, 0x6f, 0xbe, 0xe2, 0x40, 0x45, 0xed,
+                                                     0xd7, 0x3e, 0x1d, 0x58, 0x8a, 0xd5};
 
 const yearnVaultDefinition_t YEARN_VAULTS[NUM_YEARN_VAULTS] = {
     {{0xbf, 0xa4, 0xd8, 0xaa, 0x6d, 0x8a, 0x37, 0x9a, 0xbf, 0xe7,

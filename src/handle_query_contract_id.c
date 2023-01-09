@@ -23,6 +23,10 @@ void handle_query_contract_id(void *parameters) {
         case ZAP_IN:
             strlcpy(msg->version, "Zap In", msg->versionLength);
             break;
+        case MODIFY_LOCK:
+        case MODIFY_LOCK_TO:
+            strlcpy(msg->version, "Modify Lock", msg->versionLength);
+            break;
         default:
             PRINTF("Selector index: %d not supported\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

@@ -116,6 +116,44 @@ static void handle_zap_in(ethPluginProvideParameter_t *msg, context_t *context) 
     }
 }
 
+static void handle_modify_lock(ethPluginProvideParameter_t *msg, context_t *context) {
+    switch (context->next_param) {
+        case AMOUNT:
+            copy_parameter(context->amount, msg->parameter, sizeof(context->amount));
+            context->next_param = UNLOCK_TIME;
+            break;
+        case UNLOCK_TIME:
+            copy_parameter(context->unlock_time, msg->parameter, sizeof(context->unlock_time));
+            context->next_param = UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            break;
+    }
+}
+
+static void handle_modify_lock_to(ethPluginProvideParameter_t *msg, context_t *context) {
+    switch (context->next_param) {
+        case AMOUNT:
+            copy_parameter(context->amount, msg->parameter, sizeof(context->amount));
+            context->next_param = UNLOCK_TIME;
+            break;
+        case UNLOCK_TIME:
+            copy_parameter(context->unlock_time, msg->parameter, sizeof(context->unlock_time));
+            context->next_param = RECIPIENT;
+            break;
+        case RECIPIENT:
+            copy_address(context->extra_address, msg->parameter, sizeof(context->extra_address));
+            context->next_param = UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            break;
+    }
+}
+
 static void handle_none(ethPluginProvideParameter_t *msg, context_t *context) {
     switch (context->next_param) {
         default:
@@ -159,6 +197,12 @@ void handle_provide_parameter(void *parameters) {
             break;
         case ZAP_IN:
             handle_zap_in(msg, context);
+            break;
+        case MODIFY_LOCK:
+            handle_modify_lock(msg, context);
+            break;
+        case MODIFY_LOCK_TO:
+            handle_modify_lock_to(msg, context);
             break;
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);

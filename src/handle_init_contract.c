@@ -42,6 +42,8 @@ void handle_init_contract(void *parameters) {
         case WITHDRAW:
         case WITHDRAW_TO:
         case WITHDRAW_TO_SLIPPAGE:
+        case MODIFY_LOCK:
+        case MODIFY_LOCK_TO:
             context->next_param = AMOUNT;
             break;
         case ZAP_IN:

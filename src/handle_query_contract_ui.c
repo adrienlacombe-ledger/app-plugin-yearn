@@ -15,6 +15,24 @@ void copy_amount_with_ticker(const size_t *amount,
     out_buffer[out_buffer_size - 1] = '\0';
 }
 
+void copy_seconds_to_string(size_t seconds, char *out_buffer, size_t out_buffer_size) {
+    size_t weeks = seconds / 604800;  // 60 seconds * 60 minutes * 24 hours * 7 days
+    seconds %= 604800;
+
+    size_t days = seconds / 86400;  // 60 seconds * 60 minutes * 24 hours
+
+    char tmp_weeks[100] = {0};
+    amountToString(weeks, sizeof(weeks), 0, "", tmp_weeks, sizeof(tmp_weeks));
+
+    char tmp_days[100] = {0};
+    amountToString(days, sizeof(days), 0, "", tmp_days, sizeof(tmp_days));
+
+    size_t stringLen = strnlen(tmp_weeks, sizeof(tmp_weeks)) + 1 + sizeof("weeks") +
+                       strnlen(tmp_days, sizeof(tmp_days)) + 1 + sizeof("weeks");
+    snprintf(out_buffer, MIN(out_buffer_size, stringLen), "%s weeks %s days", tmp_weeks, tmp_days);
+    out_buffer[out_buffer_size - 1] = '\0';
+}
+
 /******************************************************************************
 **  Will display the splipage used for this transaction.
 **  | Slippage |
@@ -59,6 +77,22 @@ static void set_amount_with_want(ethQueryContractUI_t *msg, context_t *context) 
                             context->decimals,
                             context->want,
                             sizeof(context->want),
+                            msg->msg,
+                            msg->msgLength);
+}
+
+/******************************************************************************
+**  Will display the amount of tokens using a custom ticker and decimals
+**  |   Amount  |
+**  |  200 YFI  |
+******************************************************************************/
+static void set_amount_with_custom(ethQueryContractUI_t *msg, char *ticker, size_t decimals) {
+    strlcpy(msg->title, "Amount", msg->titleLength);
+    copy_amount_with_ticker(context->amount,
+                            sizeof(context->amount),
+                            decimals,
+                            ticker,
+                            sizeof(ticker),
                             msg->msg,
                             msg->msgLength);
 }
@@ -126,6 +160,16 @@ void set_vault_information(ethQueryContractUI_t *msg, context_t *context) {
     }
 }
 
+/******************************************************************************
+**  Will display the unlock time
+**  | Unlock Time     |
+**  | 12 weeks 6 days |
+******************************************************************************/
+static void set_unlock_time(ethQueryContractUI_t *msg, context_t *context) {
+    strlcpy(msg->title, "Unlock Time", msg->titleLength);
+    copy_seconds_to_string(context->unlock_time, msg->msg, msg->msgLength);
+}
+
 void handle_query_contract_ui_zap_in(ethQueryContractUI_t *msg, context_t *context) {
     set_vault_information(msg, context);
 
@@ -161,6 +205,24 @@ void handle_query_contract_ui_track_in(ethQueryContractUI_t *msg, context_t *con
             break;
         case 1:
             set_vault_name(msg, context);
+            break;
+        default:
+            PRINTF("Received an invalid screenIndex\n");
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+}
+
+void handle_query_contract_ui_modify_lock(ethQueryContractUI_t *msg, context_t *context) {
+    switch (msg->screenIndex) {
+        case 0:
+            set_amount_with_custom(msg, "YFI", 18);
+            break;
+        case 1:
+            set_unlock_time(msg, context);
+            break;
+        case 2:  // it's modify_lock_to
+            set_recipient_ui(msg, context);
             break;
         default:
             PRINTF("Received an invalid screenIndex\n");
@@ -226,6 +288,10 @@ void handle_query_contract_ui(void *parameters) {
             break;
         case ZAP_IN:
             handle_query_contract_ui_zap_in(msg, context);
+            break;
+        case MODIFY_LOCK:
+        case MODIFY_LOCK_TO:
+            handle_query_contract_ui_modify_lock(msg, context);
             break;
         default:
             handle_query_contract_ui_vaults(msg, context);
