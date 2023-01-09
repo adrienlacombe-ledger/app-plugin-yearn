@@ -60,7 +60,6 @@ extern yearnVaultDefinition_t const YEARN_VAULTS[NUM_YEARN_VAULTS];
 typedef struct context_t {
     uint8_t amount[INT256_LENGTH];
     uint8_t slippage[INT256_LENGTH];
-    uint8_t unlock_time[INT256_LENGTH];
     uint8_t vault_address[ADDRESS_LENGTH];
     uint8_t extra_address[ADDRESS_LENGTH];
     char vault[MAX_VAULT_TICKER_LEN];

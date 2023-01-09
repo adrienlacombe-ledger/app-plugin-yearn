@@ -123,7 +123,7 @@ static void handle_modify_lock(ethPluginProvideParameter_t *msg, context_t *cont
             context->next_param = UNLOCK_TIME;
             break;
         case UNLOCK_TIME:
-            copy_parameter(context->unlock_time, msg->parameter, sizeof(context->unlock_time));
+            copy_parameter(context->slippage, msg->parameter, sizeof(context->slippage));
             context->next_param = UNEXPECTED_PARAMETER;
             break;
         default:
@@ -140,7 +140,7 @@ static void handle_modify_lock_to(ethPluginProvideParameter_t *msg, context_t *c
             context->next_param = UNLOCK_TIME;
             break;
         case UNLOCK_TIME:
-            copy_parameter(context->unlock_time, msg->parameter, sizeof(context->unlock_time));
+            copy_parameter(context->slippage, msg->parameter, sizeof(context->slippage));
             context->next_param = RECIPIENT;
             break;
         case RECIPIENT:

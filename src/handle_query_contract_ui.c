@@ -167,7 +167,7 @@ void set_vault_information(ethQueryContractUI_t *msg, context_t *context) {
 ******************************************************************************/
 static void set_unlock_time(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Unlock Time", msg->titleLength);
-    copy_seconds_to_string(context->unlock_time, msg->msg, msg->msgLength);
+    copy_seconds_to_string(context->slippage, msg->msg, msg->msgLength);
 }
 
 void handle_query_contract_ui_zap_in(ethQueryContractUI_t *msg, context_t *context) {
