@@ -15,21 +15,47 @@ void copy_amount_with_ticker(const size_t *amount,
     out_buffer[out_buffer_size - 1] = '\0';
 }
 
-void copy_seconds_to_string(size_t seconds, char *out_buffer, size_t out_buffer_size) {
-    size_t weeks = seconds / 604800;  // 60 seconds * 60 minutes * 24 hours * 7 days
-    seconds %= 604800;
+void copy_date(size_t timestamp, char *out_buffer, size_t out_buffer_size) {
+    size_t monthDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	
+    size_t days = (timestamp / 86400);
 
-    size_t days = seconds / 86400;  // 60 seconds * 60 minutes * 24 hours
+	size_t year = 1970;
+	size_t month = 1;
+	size_t day = 1;
 
-    char tmp_weeks[100] = {0};
-    amountToString(weeks, sizeof(weeks), 0, "", tmp_weeks, sizeof(tmp_weeks));
+	while(days > 0) {
+		char leap_year = (year % 4) == 0;
 
-    char tmp_days[100] = {0};
-    amountToString(days, sizeof(days), 0, "", tmp_days, sizeof(tmp_days));
+		for(int i = 0; i < 12 ;i++) {
+			size_t days_in_month = monthDays[i];
 
-    size_t stringLen = strnlen(tmp_weeks, sizeof(tmp_weeks)) + 1 + sizeof("weeks") +
-                       strnlen(tmp_days, sizeof(tmp_days)) + 1 + sizeof("weeks");
-    snprintf(out_buffer, MIN(out_buffer_size, stringLen), "%s weeks %s days", tmp_weeks, tmp_days);
+			if(i == 1 && leap_year) { // February of leap year
+				days_in_month++;
+			}
+
+			if(days < days_in_month) {
+				day = days + 1;
+				days = 0;
+				break;
+			}
+
+			days -= days_in_month;
+
+			month++;
+		}
+
+		month = 1;
+		year++;
+	}
+
+	size_t seconds = (timestamp % 86400);
+
+	size_t hour = seconds / 3600;
+	size_t minute = (seconds % 3600) / 60;
+	size_t second = (seconds % 3600) % 60;
+
+    snprintf(out_buffer, out_buffer_size,  "%d-%d-%d %d:%d:%d", year, month, day, hour, minute, second);
     out_buffer[out_buffer_size - 1] = '\0';
 }
 
@@ -167,7 +193,7 @@ void set_vault_information(ethQueryContractUI_t *msg, context_t *context) {
 ******************************************************************************/
 static void set_unlock_time(ethQueryContractUI_t *msg, context_t *context) {
     strlcpy(msg->title, "Unlock Time", msg->titleLength);
-    copy_seconds_to_string(context->slippage, msg->msg, msg->msgLength);
+    copy_date(context->slippage, msg->msg, msg->msgLength);
 }
 
 void handle_query_contract_ui_zap_in(ethQueryContractUI_t *msg, context_t *context) {
