@@ -86,7 +86,7 @@ static void set_amount_with_want(ethQueryContractUI_t *msg, context_t *context) 
 **  |   Amount  |
 **  |  200 YFI  |
 ******************************************************************************/
-static void set_amount_with_custom(ethQueryContractUI_t *msg, char *ticker, size_t decimals) {
+static void set_amount_with_custom(ethQueryContractUI_t *msg, context_t *context, char *ticker, size_t decimals) {
     strlcpy(msg->title, "Amount", msg->titleLength);
     copy_amount_with_ticker(context->amount,
                             sizeof(context->amount),
@@ -216,7 +216,7 @@ void handle_query_contract_ui_track_in(ethQueryContractUI_t *msg, context_t *con
 void handle_query_contract_ui_modify_lock(ethQueryContractUI_t *msg, context_t *context) {
     switch (msg->screenIndex) {
         case 0:
-            set_amount_with_custom(msg, "YFI", 18);
+            set_amount_with_custom(msg, context, "YFI", 18);
             break;
         case 1:
             set_unlock_time(msg, context);
