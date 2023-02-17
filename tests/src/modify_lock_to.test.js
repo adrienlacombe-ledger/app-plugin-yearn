@@ -7,9 +7,9 @@ const contractAddr = "0x90c1f9220d90d3966fbee24045edd73e1d588ad5";
 const AMOUNT_TO_DEPOSIT = '345123456789352738273'; // 345.123456789352738273
 const UNLOCK_TIME = '1727248841'; // September 25, 2024 7:20:41
 const recipient = "0xB8c93dF4E1e6b1097889554D9294Dfb42814063a"; //Never use this address for anything other than tests - compromised
-const BASE_SCREENS_S = (1 + 2 + 1 + 1 + 1) //YEARN + AMOUNT + GAS_FEES + VAULT + APPROVE
-const BASE_SCREENS_X = (1 + 1 + 1 + 1 + 1) //YEARN + AMOUNT + GAS_FEES + VAULT + APPROVE
-
+const BASE_SCREENS_S = (1 + 2 + 3 + 1 + 1 ) //YEARN + AMOUNT + UNLOCK_TIME + GAS_FEES + APPROVE
+const BASE_SCREENS_X = (1 + 1 + 1 + 1 + 1 ) //YEARN + AMOUNT + UNLOCK_TIME + GAS_FEES + APPROVE
+ss
 // Nanos S test
 test('[Nano S] Modify Lock with Recipient', zemu("nanos", async (sim, eth) => {
   const contract = new ethers.Contract(contractAddr, ['function modify_lock(uint256, uint256, address)']);
