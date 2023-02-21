@@ -54,8 +54,8 @@ const uint8_t *const YEARN_SELECTORS[NUM_SELECTORS] = {DEPOSIT_SELECTOR,
                                                        WITHDRAW_TO_SLIPPAGE_SELECTOR,
                                                        ZAP_IN_SELECTOR,
                                                        CLAIM_SELECTOR,
-                                                       MODIFY_LOCK,
-                                                       MODIFY_LOCK_TO};
+                                                       MODIFY_LOCK_SELECTOR,
+                                                       MODIFY_LOCK_TO_SELECTOR};
 
 // Yearn partners contract address
 const uint8_t YEARN_PARTNERS_ADDRESS[ADDRESS_LENGTH] = {0x8e, 0xe3, 0x92, 0xa4, 0x78, 0x73, 0x97,
